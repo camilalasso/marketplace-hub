@@ -1027,3 +1027,43 @@ footer {
     font-weight: bold;
     color: #4e342e; /* opcional: color armónico */
 }
+@media (max-width: 600px) {
+  header {
+    flex-direction: column;
+    padding: 15px 4%;
+    position: relative;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+
+  .logo-container {
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .search-container {
+    order: 2;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  #searchInput {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+
+  #cart-icon {
+    order: 3;
+    align-self: center;
+    margin-top: 10px;
+  }
+
+  .banner {
+    padding: 30px 10px;
+  }
+}
