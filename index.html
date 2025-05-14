@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Marketplace HUB</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+       <div class="logo-container" style="height: 60px; margin-left: 20px;">
+    <img src="imagenes/logo.png" alt="Digital Marketplace Hub" style="height: 100%; object-fit: contain;">
+</div>
+
+<div class="search-container">
+    <input type="text" id="searchInput" placeholder="Busca productos tecnológicos...">
+    <button onclick="buscarProductos()"><i class="fas fa-search"></i> Buscar</button>
+</div>
+        <div class="usuario-container">
+            <span id="nombre-usuario" style="display: none;"></span>
+            <button id="btn-login" onclick="mostrarLoginModal()"><i class="fas fa-user"></i> Iniciar Sesión</button>
+            <button id="btn-registro" onclick="mostrarRegistroModal()"><i class="fas fa-user-plus"></i> Registrarse</button>
+            <button id="btn-logout" onclick="cerrarSesion()" style="display: none;"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+        </div>
+        <button id="cart-icon" onclick="mostrarCarrito()">
+            <i class="fas fa-shopping-cart"></i> Carrito (<span id="cart-count">0</span>)
+        </button>
+    </header>
+
+    <div class="banner" style="
+    background-image: url('imagenes/h1.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    color: #fff;
+">
+    <div style="
+        background: rgba(0, 0, 0, 0.6);
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        max-width: 800px;
+    ">
+        <h2 style="font-size: 2.6em; margin-bottom: 15px; color: #ffe082;">Explora mucho más</h2>
+        <p style="font-size: 1.3em; margin-bottom: 25px; color: #f8bbd0;">Desde gadgets hasta productos para el hogar, todo en un solo lugar</p>
+       
+    </div>
+</div>
+
+
+    <main>
+        <!-- Sección de filtros añadida -->
+        <aside class="filtros-sidebar">
+            <div class="filtros-container">
+                <h3><i class="fas fa-filter"></i> Filtros</h3>
+                
+                <div class="filtro-grupo">
+                    <label for="filtro-categorias">Categoría:</label>
+                    <select id="filtro-categorias">
+                        <option value="todos">Todas las categorías</option>
+                        <!-- Se rellenarán dinámicamente -->
+                    </select>
+                </div>
+                
+                <div class="filtro-grupo">
+                    <label for="filtro-precio">Rango de precio:</label>
+                    <select id="filtro-precio">
+                        <option value="todos">Todos los precios</option>
+                        <option value="bajo">Bajo (< $50)</option>
+                        <option value="medio">Medio ($50 – $200)</option>
+                        <option value="alto">Alto (> $200)</option>
+                    </select>
+                </div>
+                
+                <div class="filtro-grupo">
+                    <label for="filtro-marca">Marca:</label>
+                    <select id="filtro-marca">
+                        <option value="todos">Todas las marcas</option>
+                        <!-- Se rellenarán dinámicamente -->
+                    </select>
+                </div>
+                
+                <div class="filtro-grupo">
+                    <label for="filtro-calificacion">Calificación:</label>
+                    <select id="filtro-calificacion">
+                        <option value="todos">Todas las calificaciones</option>
+                        <option value="5">★★★★★ (5)</option>
+                        <option value="4">★★★★☆ (4)</option>
+                        <option value="3">★★★☆☆ (3)</option>
+                        <option value="2">★★☆☆☆ (2)</option>
+                        <option value="1">★☆☆☆☆ (1)</option>
+                    </select>
+                </div>
+                
+                <div class="filtro-grupo">
+                    <label for="filtro-color">Color:</label>
+                    <select id="filtro-color">
+                        <option value="todos">Todos los colores</option>
+                        <!-- Se rellenarán dinámicamente -->
+                    </select>
+                </div>
+                
+                <div class="filtro-grupo">
+                    <label for="filtro-tamaño">Tamaño:</label>
+                    <select id="filtro-tamaño">
+                        <option value="todos">Todos los tamaños</option>
+                        <!-- Se rellenarán dinámicamente -->
+                    </select>
+                </div>
+                
+                <div class="filtro-grupo">
+                    <label for="filtro-material">Material:</label>
+                    <select id="filtro-material">
+                        <option value="todos">Todos los materiales</option>
+                        <!-- Se rellenarán dinámicamente -->
+                    </select>
+                </div>
+                
+                <div class="filtros-botones">
+                    <button id="btn-filtrar" class="btn-filtrar"><i class="fas fa-filter"></i> Aplicar Filtros</button>
+                    <button onclick="limpiarFiltros()" class="btn-limpiar"><i class="fas fa-times"></i> Limpiar Filtros</button>
+                </div>
+            </div>
+        </aside>
+        
+        <section id="productos-container" class="productos-grid">
+            <!-- Los productos se cargarán dinámicamente aquí -->
+        </section>
+
+        <div id="modal-carrito" class="modal">
+            <div class="modal-contenido">
+                <span class="cerrar" onclick="cerrarCarrito()">&times;</span>
+                <h2>Carrito de Compras</h2>
+                <div id="carrito-items"></div>
+                <div id="total-carrito"></div>
+                <button onclick="mostrarPagoModal()"><i class="fas fa-check-circle"></i> Finalizar Compra</button>
+            </div>
+        </div>
+
+        <div id="modal-recibo" class="modal">
+            <div class="modal-recibo-contenido">
+                <span class="cerrar" onclick="cerrarRecibo()">&times;</span>
+                <div id="contenido-recibo"></div>
+                <div id="pdf-preview" style="width: 100%; height: 500px; margin-top: 20px;"></div>
+                <div class="acciones-recibo">
+                    <button class="btn-descargar" onclick="descargarRecibo()"><i class="fas fa-download"></i> Descargar PDF</button>
+                    <button class="btn-imprimir" onclick="imprimirRecibo()"><i class="fas fa-print"></i> Imprimir</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Login -->
+        <div id="modal-login" class="modal">
+            <div class="modal-contenido">
+                <span class="cerrar" onclick="ocultarLoginModal()">&times;</span>
+                <h2>Iniciar Sesión</h2>
+                <form id="form-login">
+                    <div class="form-grupo">
+                        <label for="login-email">Email:</label>
+                        <input type="email" id="login-email" required>
+                    </div>
+                    <div class="form-grupo">
+                        <label for="login-password">Contraseña:</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <button type="submit">Iniciar Sesión</button>
+                </form>
+                <p class="texto-registro">¿No tienes cuenta? <a href="#" onclick="mostrarRegistroModal()">Regístrate aquí</a></p>
+            </div>
+        </div>
+
+        <!-- Modal de Registro -->
+        <div id="modal-registro" class="modal">
+            <div class="modal-contenido">
+                <span class="cerrar" onclick="ocultarRegistroModal()">&times;</span>
+                <h2>Registro de Usuario</h2>
+                <form id="form-registro">
+                    <div class="form-grupo">
+                        <label for="registro-email">Email:</label>
+                        <input type="email" id="registro-email" required>
+                    </div>
+                    <div class="form-grupo">
+                        <label for="registro-password">Contraseña:</label>
+                        <input type="password" id="registro-password" required>
+                    </div>
+                    <div class="form-grupo">
+                        <label for="registro-nombre">Nombre:</label>
+                        <input type="text" id="registro-nombre" required>
+                    </div>
+                    <div class="form-grupo">
+                        <label for="registro-apellido">Apellido:</label>
+                        <input type="text" id="registro-apellido" required>
+                    </div>
+                    <div class="form-grupo">
+                        <label for="registro-direccion">Dirección:</label>
+                        <input type="text" id="registro-direccion" required>
+                    </div>
+                    <div class="form-grupo">
+                        <label for="registro-ciudad">Ciudad:</label>
+                        <input type="text" id="registro-ciudad" required>
+                    </div>
+                    <div class="form-grupo">
+                        <label for="registro-codigo-postal">Código Postal:</label>
+                        <input type="text" id="registro-codigo-postal" required>
+                    </div>
+                    <div class="form-grupo">
+                        <label for="registro-telefono">Teléfono:</label>
+                        <input type="tel" id="registro-telefono" required>
+                    </div>
+                    <button type="submit">Registrarse</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal de Pago -->
+     <div id="modal-pago" class="modal">
+    <div class="modal-contenido">
+        <span class="cerrar" onclick="ocultarPagoModal()">&times;</span>
+        <h2 class="titulo-metodo-pago">Selecciona el método de pago</h2>
+
+        <div class="botones-pago" style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <button type="button" id="btn-tarjeta" class="activo" onclick="mostrarFormularioPago('tarjeta')">Tarjeta</button>
+            <button type="button" id="btn-pse" onclick="mostrarFormularioPago('pse')">PSE</button>
+        </div>
+
+        <!-- FORMULARIO TARJETA -->
+        <div id="formulario-tarjeta">
+            <form id="form-pago" onsubmit="procesarPago(event)">
+                <h3>Datos de Envío</h3>
+                <div class="form-grupo">
+                    <label for="pago-nombre">Nombre:</label>
+                    <input type="text" id="pago-nombre" required>
+                </div>
+                <div class="form-grupo">
+                    <label for="pago-apellido">Apellido:</label>
+                    <input type="text" id="pago-apellido" required>
+                </div>
+                <div class="form-grupo">
+                    <label for="pago-direccion">Dirección:</label>
+                    <input type="text" id="pago-direccion" required>
+                </div>
+                <div class="form-grupo">
+                    <label for="pago-ciudad">Ciudad:</label>
+                    <input type="text" id="pago-ciudad" required>
+                </div>
+                <div class="form-grupo">
+                    <label for="pago-codigo-postal">Código Postal:</label>
+                    <input type="text" id="pago-codigo-postal" required>
+                </div>
+                <div class="form-grupo">
+                    <label for="pago-telefono">Teléfono:</label>
+                    <input type="tel" id="pago-telefono" required>
+                </div>
+
+                <h3>Datos de Tarjeta</h3>
+                <div class="form-grupo">
+                    <label for="pago-tarjeta-nombre">Nombre en la tarjeta:</label>
+                    <input type="text" id="pago-tarjeta-nombre" required>
+                </div>
+                <div class="form-grupo">
+                    <label for="pago-tarjeta-numero">Número de tarjeta:</label>
+                    <input type="text" id="pago-tarjeta-numero" placeholder="1234 5678 9012 3456" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-grupo">
+                        <label for="pago-tarjeta-expiracion">Fecha de expiración (MM/AA):</label>
+                        <input type="text" id="pago-tarjeta-expiracion" placeholder="MM/AA" required>
+                    </div>
+                    <div class="form-grupo">
+                        <label for="pago-tarjeta-cvv">CVV:</label>
+                        <input type="text" id="pago-tarjeta-cvv" placeholder="123" required>
+                    </div>
+                </div>
+                <button type="submit">Completar Pago con Tarjeta</button>
+            </form>
+        </div>
+
+        <!-- FORMULARIO PSE -->
+        <div id="formulario-pse" style="display: none;">
+            <form onsubmit="procesarPagoPSE(event)">
+                <h3>Datos de Envío</h3>
+                <div class="form-grupo">
+                    <label for="pse-nombre">Nombre completo:</label>
+                    <input type="text" id="pse-nombre" required>
+                </div>
+                <div class="form-grupo">
+                    <label for="pse-documento">Número de documento:</label>
+                    <input type="text" id="pse-documento" required>
+                </div>
+                <div class="form-grupo">
+                    <label for="pse-banco">Selecciona tu banco:</label>
+                    <select id="pse-banco" required>
+                        <option value="">-- Selecciona --</option>
+                        <option value="Bancolombia">Bancolombia</option>
+                        <option value="Davivienda">Davivienda</option>
+                        <option value="Nequi">Nequi</option>
+                        <option value="Banco de Bogotá">Banco de Bogotá</option>
+                    </select>
+                </div>
+                <button type="submit">Completar Pago con PSE</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+    </main>
+<section class="info-tienda" style="padding: 40px 3%; background-color: #fff3e0; text-align: center;">
+    <h2 style="color: #d84315; margin-bottom: 20px;">Sobre Nosotros</h2>
+    <p style="max-width: 800px; margin: 0 auto; font-size: 1.1rem; color: #5d4037;">
+        En Digital Marketplace Hub nos dedicamos a ofrecer productos innovadores, útiles y confiables para el hogar, la oficina y el día a día. Nuestro compromiso es brindarte calidad, buen servicio y una experiencia de compra simple y segura.
+    </p>
+</section>
+
+<!-- Sección: Testimonios -->
+<section class="testimonios" style="padding: 50px 3%; background-color: #fbe9e7;">
+    <h2 style="text-align: center; color: #bf360c; margin-bottom: 30px;">Lo que opinan nuestros clientes</h2>
+    <div style="display: flex; flex-wrap: wrap; gap: 30px; justify-content: center;">
+        <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); max-width: 300px;">
+            <p>"Excelente servicio y productos de calidad. Volveré a comprar sin duda."</p>
+            <strong>- Ana G.</strong>
+        </div>
+        <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); max-width: 300px;">
+            <p>"Recibí mi pedido en tiempo récord. Muy recomendado."</p>
+            <strong>- Carlos M.</strong>
+        </div>
+        <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); max-width: 300px;">
+            <p>"Productos bien presentados y atención muy cordial. 10/10."</p>
+            <strong>- Laura T.</strong>
+        </div>
+    </div>
+</section>
+
+<!-- Sección: Preguntas Frecuentes -->
+<section class="faq" style="padding: 50px 3%; background-color: #fff3e0; font-family: 'Segoe UI', sans-serif;">
+    <h2 style="text-align: center; color: #6d4c41; margin-bottom: 40px; font-size: 2rem;">Preguntas Frecuentes</h2>
+    
+    <div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 25px;">
+
+        <div style="background-color: #ffffff; padding: 20px 25px; border-left: 5px solid #d84315; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
+            <h4 style="color: #d84315; margin-bottom: 8px;">¿Cuánto tiempo tarda el envío?</h4>
+            <p style="color: #5d4037; margin: 0;">Generalmente entre 2 y 5 días hábiles, dependiendo de tu ubicación.</p>
+        </div>
+
+        <div style="background-color: #ffffff; padding: 20px 25px; border-left: 5px solid #d84315; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
+            <h4 style="color: #d84315; margin-bottom: 8px;">¿Puedo pagar al recibir?</h4>
+            <p style="color: #5d4037; margin: 0;">Actualmente solo aceptamos pagos electrónicos y con tarjeta.</p>
+        </div>
+
+        <div style="background-color: #ffffff; padding: 20px 25px; border-left: 5px solid #d84315; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
+            <h4 style="color: #d84315; margin-bottom: 8px;">¿Puedo devolver un producto?</h4>
+            <p style="color: #5d4037; margin: 0;">Sí, tienes hasta 10 días hábiles para gestionar una devolución.</p>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- Sección: Formulario de Contacto -->
+<section class="contacto" style="padding: 50px 3%; background-color: #f8f9fa;">
+    <h2 style="text-align: center; color: #d84315; margin-bottom: 30px;">Contáctanos</h2>
+    <form style="max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
+        <input type="text" placeholder="Nombre" required style="padding: 10px; border-radius: 6px; border: 1px solid #ccc;">
+        <input type="email" placeholder="Correo electrónico" required style="padding: 10px; border-radius: 6px; border: 1px solid #ccc;">
+        <textarea placeholder="Escribe tu mensaje..." rows="5" required style="padding: 10px; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+        <button type="submit" style="padding: 10px; background-color: #d84315; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">Enviar mensaje</button>
+    </form>
+</section>
+<!-- Extensión del footer -->
+<footer>
+    <div class="footer-content">
+        <div class="footer-section">
+            <h3>Digital Marketplace HUB</h3>
+            <p>
+                Encuentra productos que se adaptan a tu estilo de vida. Desde lo esencial hasta lo innovador, todo en un solo lugar. <br><br>
+                Compra fácil, rápido y con confianza.
+            </p>
+        </div>
+        <div class="footer-section">
+            <h3>Contacto</h3>
+            <p><i class="fas fa-envelope"></i> vlombanasotto@gmail.com</p>
+            <p><i class="fas fa-phone"></i> (+57)3023814987</p>
+        </div>
+        <div class="footer-section">
+            <h3>Síguenos</h3>
+            <div class="social-icons">
+                <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">
+                    <i class="fab fa-twitter"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección: Suscripción al boletín -->
+    <section style="text-align: center; background-color: #6d4c41; padding: 30px;">
+        <h3 style="color: #ffca28; margin-bottom: 10px;">Suscríbete a nuestro boletín</h3>
+        <form style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+            <input type="email" placeholder="Tu correo electrónico" required style="padding: 10px; border-radius: 30px; border: none; min-width: 250px;">
+            <button type="submit" style="padding: 10px 20px; border-radius: 30px; border: none; background-color: #ffca28; color: #6d4c41; font-weight: bold; cursor: pointer;">Suscribirse</button>
+        </form>
+    </section>
+
+    <!-- Parte inferior del footer -->
+    <div class="footer-bottom">
+        <p>&copy; 2025 Digital Marketplace HUB |
+            <a href="politica.html" style="color: #ffca28; text-decoration: underline;">Política de privacidad</a> |
+            <a href="politica.html" style="color: #ffca28; text-decoration: underline;">Términos y condiciones</a>
+        </p>
+    </div>
+</footer>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-object/2.2.0/pdfobject.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

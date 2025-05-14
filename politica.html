@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Política de Privacidad | Términos y Condiciones</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body style="background-color: var(--color-fondo); color: var(--color-texto);">
+    
+    <!-- NAV igual que en index.html -->
+    <header style="background: linear-gradient(135deg, var(--color-primario), #c62828); color: white;">
+        <div class="logo-container">
+    <a href="index.html">
+        <img src="imagenes/logo.png" alt="Digital Marketplace Hub" style="height: 60px; object-fit: contain;">
+    </a>
+        </div>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Busca productos tecnológicos...">
+            <button onclick="buscarProductos()"><i class="fas fa-search"></i> Buscar</button>
+        </div>
+        <div class="usuario-container">
+            <button id="btn-login" onclick="mostrarLoginModal()"><i class="fas fa-user"></i> Iniciar Sesión</button>
+            <button id="btn-registro" onclick="mostrarRegistroModal()"><i class="fas fa-user-plus"></i> Registrarse</button>
+            <button id="btn-logout" onclick="cerrarSesion()" style="display: none;"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+        </div>
+        <button id="cart-icon" onclick="mostrarCarrito()">
+            <i class="fas fa-shopping-cart"></i> Carrito (<span id="cart-count">0</span>)
+        </button>
+    </header>
+
+    <!-- CONTENIDO DE LA PÁGINA -->
+    <main style="padding: 40px 5%; max-width: 900px; margin: 0 auto;">
+        <h1 style="color: var(--color-primario); margin-bottom: 30px;">Política de Privacidad</h1>
+        <p style="line-height: 1.7; margin-bottom: 30px;">
+            En Digital Marketplace Hub respetamos tu privacidad. Todos los datos personales recolectados a través de este sitio son utilizados exclusivamente para el procesamiento de pedidos, atención al cliente y comunicación relacionada con nuestros productos y servicios. No compartimos tu información con terceros sin tu consentimiento.
+        </p>
+
+        <h2 style="color: var(--color-primario); margin-bottom: 20px;">Términos y Condiciones</h2>
+        <p style="line-height: 1.7;">
+            Al utilizar nuestro sitio aceptas nuestras condiciones de uso. Esto incluye el cumplimiento de leyes aplicables, respeto a los derechos de propiedad intelectual y el uso responsable del sitio. Nos reservamos el derecho de modificar estos términos en cualquier momento sin previo aviso.
+        </p>
+    </main>
+
+    <!-- FOOTER igual al de index.html -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Digital Marketplace HUB</h3>
+                <p>Encuentra productos que se adaptan a tu estilo de vida. Desde lo esencial hasta lo innovador, todo en un solo lugar.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <p><i class="fas fa-envelope"></i> vlombanasotto@gmail.com</p>
+                <p><i class="fas fa-phone"></i>  (+57)3023814987</p>
+            </div>
+            <div class="footer-section">
+                <h3>Síguenos</h3>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
+                    <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <section style="text-align: center; background-color: #6d4c41; padding: 30px;">
+            <h3 style="color: #ffca28; margin-bottom: 10px;">Suscríbete a nuestro boletín</h3>
+            <form style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+                <input type="email" placeholder="Tu correo electrónico" required style="padding: 10px; border-radius: 30px; border: none; min-width: 250px;">
+                <button type="submit" style="padding: 10px 20px; border-radius: 30px; border: none; background-color: #ffca28; color: #6d4c41; font-weight: bold; cursor: pointer;">Suscribirse</button>
+            </form>
+        </section>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Digital Marketplace HUB | <a href="#">Política de privacidad</a> | <a href="#">Términos y condiciones</a></p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
