@@ -524,18 +524,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         // Filtrar por rango de precio
-        if (filtrosActivos.rangoPrecio.length > 0) {
-            productosFiltrados = productosFiltrados.filter(producto => {
-                if (filtrosActivos.rangoPrecio.includes('bajo')) {
-                    return producto.precio < 50;
-                } else if (filtrosActivos.rangoPrecio.includes('medio')) {
-                    return producto.precio >= 50 && producto.precio <= 200;
-                } else if (filtrosActivos.rangoPrecio.includes('alto')) {
-                    return producto.precio > 200;
-                }
-                return true;
-            });
+       if (filtrosActivos.rangoPrecio.length > 0) {
+    productosFiltrados = productosFiltrados.filter(producto => {
+        const precio = producto.precio;
+
+        if (filtrosActivos.rangoPrecio.includes('bajo')) {
+            return precio < 300000;
+        } else if (filtrosActivos.rangoPrecio.includes('medio')) {
+            return precio >= 300000 && precio <= 1000000;
+        } else if (filtrosActivos.rangoPrecio.includes('alto')) {
+            return precio > 1000000;
         }
+
+        return true;
+    });
+}
+
         
         // Filtrar por marca
         if (filtrosActivos.marca.length > 0) {
