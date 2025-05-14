@@ -1067,3 +1067,40 @@ footer {
     padding: 30px 10px;
   }
 }
+@media (max-width: 600px) {
+  header {
+    padding: 10px 3%;
+  }
+
+  .logo-container img {
+    height: 40px; /* Reduce el tamaño del logo */
+  }
+
+  #searchInput {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+  }
+
+  .search-container button {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+
+  #cart-icon {
+    font-size: 0.85rem;
+    padding: 6px 12px;
+  }
+
+  .usuario-container button {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+
+  .banner h2 {
+    font-size: 1.5rem;
+  }
+
+  .banner p {
+    font-size: 1rem;
+  }
+}
